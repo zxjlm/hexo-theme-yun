@@ -20,28 +20,37 @@ function random(min, max) {
  */
 function generateBanner(title) {
   let sumH = 0;
-  const lineTop = document.querySelector(".vertical-line-top");
-  const lineBottom = document.querySelector(".vertical-line-bottom");
-  const charContainer = document.querySelector(".banner-char-container");
-  charContainer.innerHTML = "";
+  let lineTop = document.querySelector(".vertical-line-top");
+  let lineBottom = document.querySelector(".vertical-line-bottom");
+
+  let tmp = title.split("-");
+  title = [tmp[0], " ", ...tmp[1]];
 
   for (let i = 0; i < title.length; i++) {
     const char = title[i];
     let charBox = document.createElement("div");
     let rn = random(1.5, 3.5);
-    charBox.innerHTML = "<span class='char'>" + char + "</span>";
-    let charSize = rn + "rem";
-
-    charBox.classList.add("char-box");
-    charContainer.appendChild(charBox);
-
-    if (i % 2 === 0) {
-      charBox.classList.add("char-left");
-      charBox.style.animationName = "char-move-left";
+    if (char === " ") {
+      charBox.innerHTML =
+        `<span class='char' style='height: ${rn / 2}rem'>` + char + "</span>";
     } else {
-      charBox.classList.add("char-right");
-      charBox.style.animationName = "char-move-right";
+      charBox.innerHTML = "<span class='char'>" + char + "</span>";
     }
+
+    let charSize = rn + "rem";
+    banner.insertBefore(charBox, lineBottom);
+    charBox.classList.add("char-box");
+
+    if (i !== 0) {
+      if (i % 2 === 0) {
+        charBox.classList.add("char-left");
+        charBox.style.animationName = "char-move-left";
+      } else {
+        charBox.classList.add("char-right");
+        charBox.style.animationName = "char-move-right";
+      }
+    }
+
     charBox.style.setProperty("--banner-char-size", charSize);
 
     const width = window
@@ -72,4 +81,3 @@ function initBanner() {
 }
 
 document.addEventListener("DOMContentLoaded", initBanner);
-document.addEventListener("pjax:success", initBanner);
